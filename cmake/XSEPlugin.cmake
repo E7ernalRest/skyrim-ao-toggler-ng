@@ -25,11 +25,10 @@ endif()
 
 add_library("${PROJECT_NAME}" SHARED)
 
-target_compile_features(
-	"${PROJECT_NAME}"
-	PRIVATE
-		cxx_std_23
-)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -62,6 +61,12 @@ target_precompile_headers(
 		include/PCH.h
 )
 
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_DEBUG OFF)
+
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_RUNTIME ON)
+
 find_path(SIMPLEINI_INCLUDE_DIRS "ConvertUTF.c")
 
 target_include_directories(
@@ -74,11 +79,6 @@ target_include_directories(
 		${SIMPLEINI_INCLUDE_DIRS}
 )
 
-set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
-set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_DEBUG OFF)
-
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_STATIC_RUNTIME ON)
 
 if (CMAKE_GENERATOR MATCHES "Visual Studio")
 	add_compile_definitions(_UNICODE)
@@ -132,21 +132,19 @@ if (CMAKE_GENERATOR MATCHES "Visual Studio")
 	)
 endif()
 
+#add_subdirectory(${CommonLibPath} ${CommonLibName} EXCLUDE_FROM_ALL)
+
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
-
-if (BUILD_SKYRIM)
-	find_package(CommonLibSSE REQUIRED)
-	target_link_libraries(
-		${PROJECT_NAME} 
-		PUBLIC 
-			CommonLibSSE::CommonLibSSE
-		PRIVATE
-			nlohmann_json::nlohmann_json
-			magic_enum::magic_enum
-	)
-else()
-	add_subdirectory(${CommonLibPath} ${CommonLibName} EXCLUDE_FROM_ALL)
-endif()
-
 find_package(spdlog CONFIG REQUIRED)
+
+find_package(CommonLibSSE REQUIRED)
+
+target_link_libraries(
+	${PROJECT_NAME} 
+	PUBLIC 
+		CommonLibSSE::CommonLibSSE
+	PRIVATE
+		nlohmann_json::nlohmann_json
+		magic_enum::magic_enum)
+
