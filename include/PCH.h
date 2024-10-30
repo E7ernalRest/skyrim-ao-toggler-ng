@@ -13,15 +13,10 @@
 #	define SKSEPlugin_Query F4SEPlugin_Query
 #	define RUNTIME RUNTIME_1_10_163
 #else
+#	define SKSE_SUPPORT_XBYAK
 #	include "RE/Skyrim.h"
 #	include "SKSE/SKSE.h"
-#	if defined(SKYRIMAE)
-#		define RUNTIME 0
-#	elif defined(SKYRIMVR)
-#		define RUNTIME SKSE::RUNTIME_VR_1_4_15_1
-#	else
-#		define RUNTIME SKSE::RUNTIME_1_5_97
-#	endif
+#	include <xbyak/xbyak.h>
 #endif
 
 //#define MAGIC_ENUM_RANGE_MAX 256

@@ -1,6 +1,20 @@
 #include "ENBAOToggler.h"
 #include "Events.h"
 
+#define DLLEXPORT __declspec(dllexport)
+
+extern "C" DLLEXPORT const char* NAME = "ENBAOToggler for Skyrim";
+extern "C" DLLEXPORT const char* DESCRIPTION = "";
+
+HMODULE m_hModule;
+
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID)
+{
+	if (dwReason == DLL_PROCESS_ATTACH)
+		m_hModule = hModule;
+	return TRUE;
+}
+
 
 void MessageHandler(SKSE::MessagingInterface::Message* a_msg)
 {
@@ -77,7 +91,7 @@ void InitializeLog()
 	spdlog::set_pattern("[%l] %v"s);
 }
 
-EXTERN_C [[maybe_unused]] __declspec(dllexport) bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
+extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
 #ifndef NDEBUG
 	while (!IsDebuggerPresent()) {};
@@ -94,15 +108,16 @@ EXTERN_C [[maybe_unused]] __declspec(dllexport) bool SKSEAPI SKSEPlugin_Load(con
 	return true;
 }
 
-EXTERN_C [[maybe_unused]] __declspec(dllexport) constinit auto SKSEPlugin_Version = []() noexcept {
+extern "C" DLLEXPORT constinit auto SKSEPlugin_Version = []() noexcept {
 	SKSE::PluginVersionData v;
-	v.PluginName("PluginName");
-	v.PluginVersion({ 1, 0, 0, 0 });
+	v.PluginName(Plugin::NAME.data());
+	v.PluginVersion(Plugin::VERSION);
 	v.UsesAddressLibrary(true);
+	v.HasNoStructUse();
 	return v;
 }();
 
-EXTERN_C [[maybe_unused]] __declspec(dllexport) bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface*, SKSE::PluginInfo* pluginInfo)
+extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface*, SKSE::PluginInfo* pluginInfo)
 {
 	pluginInfo->name = SKSEPlugin_Version.pluginName;
 	pluginInfo->infoVersion = SKSE::PluginInfo::kVersion;

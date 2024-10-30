@@ -1,91 +1,38 @@
 {
-	"configurePresets": [
-		{
-			"binaryDir": "${sourceDir}/build",
-			"cacheVariables": {
-				"CMAKE_BUILD_TYPE": {
-					"type": "STRING",
-					"value": "Debug"
-				}
-			},
-			"errors": {
-				"deprecated": true
-			},
-			"hidden": true,
-			"name": "cmake-dev",
-			"warnings": {
-				"deprecated": true,
-				"dev": true
-			}
-		},
-		{
-			"cacheVariables": {
-				"CMAKE_TOOLCHAIN_FILE": {
-					"type": "STRING",
-					"value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-				}
-			},
-			"hidden": true,
-			"name": "vcpkg"
-		},
-		{
-			"cacheVariables": {
-				"CMAKE_MSVC_RUNTIME_LIBRARY": {
-					"type": "STRING",
-					"value": "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
-				},
-				"VCPKG_TARGET_TRIPLET": {
-					"type": "STRING",
-					"value": "x64-windows-static-md"
-				}
-			},
-			"hidden": true,
-			"name": "windows"
-		},
-		{
-			"architecture": {
-				"strategy": "set",
-				"value": "x64"
-			},
-			"cacheVariables": {
-				"CMAKE_CXX_FLAGS": "/EHsc /MP /W4 /WX"
-			},
-			"generator": "Visual Studio 17 2022",
-			"inherits": [
-				"cmake-dev",
-				"vcpkg",
-				"windows"
-			],
-			"hidden": true,
-			"name": "vs2022-windows",
-			"toolset": "v143"
-		},
-		{
-			"binaryDir": "${sourceDir}/build/skyrim",
-			"cacheVariables": {
-				"BUILD_SKYRIM": true
-			},
-			"inherits": [
-				"cmake-dev",
-				"vcpkg",
-				"windows",
-				"vs2022-windows"
-			],
-			"name": "skyrim"
-		},
-		{
-			"binaryDir": "${sourceDir}/build/vr",
-			"cacheVariables": {
-				"BUILD_SKYRIMVR": true
-			},
-			"inherits": [
-				"cmake-dev",
-				"vcpkg",
-				"windows",
-				"vs2022-windows"
-			],
-			"name": "vr"
-		}
-	],
-	"version": 3
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/install/${presetName}",
+            "architecture": { "value": "x64", "strategy": "external" },
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "cl.exe",
+                "CMAKE_CXX_FLAGS": "/permissive- /Zc:preprocessor /EHsc /MP /W4 -DWIN32_LEAN_AND_MEAN -DNOMINMAX -DUNICODE -D_UNICODE",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake",
+                "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+				"BUILD_SKYRIM": true,
+				"ENABLE_SKYRIM_AE": "ON",
+				"ENABLE_SKYRIM_SE": "ON",
+				"ENABLE_SKYRIM_VR": "ON"
+            }
+        },
+        {
+            "name": "debug",
+            "inherits": ["base"],
+            "displayName": "Debug",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+        },
+        {
+            "name": "release",
+            "inherits": ["base"],
+            "displayName": "Release",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+        }
+    ]
 }
