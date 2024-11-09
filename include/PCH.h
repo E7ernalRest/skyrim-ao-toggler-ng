@@ -1,26 +1,12 @@
 #pragma once
 
-#pragma warning(push)
-#pragma warning(disable: 5105)
-#pragma warning(disable: 4189)
+// #pragma warning(push)
+// #pragma warning(disable: 5105)
+// #pragma warning(disable: 4189)
 
-#if defined(FALLOUT4)
-#	include "F4SE/F4SE.h"
-#	include "RE/Fallout.h"
-#	define SKSE F4SE
-#	define SKSEAPI F4SEAPI
-#	define SKSEPlugin_Load F4SEPlugin_Load
-#	define SKSEPlugin_Query F4SEPlugin_Query
-#	define RUNTIME RUNTIME_1_10_163
-#else
-#	define SKSE_SUPPORT_XBYAK
-#	include "RE/Skyrim.h"
-#	include "SKSE/SKSE.h"
-#	include <xbyak/xbyak.h>
-#endif
-
-//#define MAGIC_ENUM_RANGE_MAX 256
-//#include <magic_enum.hpp>
+#include "RE/Skyrim.h"
+#include "SKSE/SKSE.h"
+#include <xbyak/xbyak.h>
 
 #include <ShlObj_core.h>
 #include <Windows.h>
@@ -31,7 +17,7 @@
 #	include <spdlog/sinks/msvc_sink.h>
 #endif
 
-#pragma warning(pop)
+// #pragma warning(pop)
 
 using namespace std::literals;
 
@@ -69,7 +55,3 @@ namespace util
 {
 	using SKSE::stl::report_and_fail;
 }
-
-#define DLLEXPORT __declspec(dllexport)
-
-#include "Plugin.h"

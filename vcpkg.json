@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
     "name": "commonlibsse-plugin",
     "version-string": "1.0.0",
     "description": "",
@@ -6,8 +7,6 @@
     "dependencies": [
         "commonlibsse-ng",
         "nlohmann-json",
-        "simpleini",
-        "magic-enum"
-    ],
-    "builtin-baseline": "36fb23307e10cc6ffcec566c46c4bb3f567c82c6"
+        "simpleini"
+    ]
   }

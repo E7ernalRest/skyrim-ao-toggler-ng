@@ -2,4 +2,6 @@ build/
 dist/
 vcpkg_installed/
 .idea/
+.vscode/
+.venv/
 include/steam/
